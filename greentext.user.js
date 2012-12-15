@@ -1,5 +1,7 @@
 // ==UserScript==
 // @name greentext
+// @namespace Draceros
+// @url https://gist.github.com/3202054
 // @version 1.0
 // @description implying
 // @match *://*/*
@@ -10,7 +12,7 @@ function implying(str) {
   var t = document.createElement("span");
 	t.innerHTML = str;
 	t.className = "implying";
-	t.style.color = "green";
+	t.style.color = "#789922";
 	return t;
 }
 
