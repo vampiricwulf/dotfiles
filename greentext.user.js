@@ -5,6 +5,7 @@
 // @version 1.0
 // @description implying
 // @match *://*/*
+// @exclude *4chan*
 // @license MIT License
 // ==/UserScript==
 
