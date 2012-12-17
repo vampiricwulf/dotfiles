@@ -17,7 +17,7 @@ replaceTextContent = function(node) {
     return;
   }
   replacingContent = true;
-  if (node.textContent.substr(0, 1) === ">") {
+  if (node.textContent.trim().substr(0, 1) === ">") {
     span = document.createElement("span");
     span.className = "implied";
     span.textContent = node.textContent;
