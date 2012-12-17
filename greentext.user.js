@@ -1,12 +1,12 @@
 // ==UserScript==
-// @name greentext
-// @namespace Draceros
-// @url https://gist.github.com/3202054
-// @version 1.0
-// @description implying
-// @include *://*
-// @exclude *4chan*
-// @license MIT License
+// @name          greentext
+// @namespace     noface
+// @url           https://github.com/ihavenoface/dotfiles/raw/master/greentext.user.js
+// @version       1.1
+// @include       *://*
+// @exclude       *4chan*
+// @license       MIT License
+// @description   implying
 // ==/UserScript==
 
 (function() {
