@@ -38,7 +38,7 @@
   changeTextNodes = function(node) {
     var parent, _i, _len, _ref;
     parent = node.parentNode;
-    if (parent.getAttribute("contenteditable") || parent.className === "implied" || parent.style.color) {
+    if (parent.getAttribute("contenteditable") || (parent.className === "implied") || parent.style.color) {
       return;
     }
     if (node.nodeType === TEXT_NODE) {
