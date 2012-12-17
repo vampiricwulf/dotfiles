@@ -19,6 +19,7 @@ replaceTextContent = function(node) {
   replacingContent = true;
   if (node.textContent.substr(0, 1) === ">") {
     span = document.createElement("span");
+    span.className = "implied";
     span.textContent = node.textContent;
     span.style.color = green;
     node.parentNode.replaceChild(span, node);
@@ -29,7 +30,7 @@ replaceTextContent = function(node) {
 changeTextNodes = function(node) {
   var parent, _i, _len, _ref;
   parent = node.parentNode;
-  if (parent.getAttribute("contenteditable") || parent.style.color) {
+  if (parent.getAttribute("contenteditable") || parent.className === "implied" || parent.style.color) {
     return;
   }
   if (node.nodeType === TEXT_NODE) {
