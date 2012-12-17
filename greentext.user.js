@@ -4,7 +4,7 @@
 // @url https://gist.github.com/3202054
 // @version 1.0
 // @description implying
-// @match *://*/*
+// @include *://*
 // @exclude *4chan*
 // @license MIT License
 // ==/UserScript==
