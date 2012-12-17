@@ -14,7 +14,7 @@
 
   d = document;
 
-  css = ".implied { color: rgb(120, 153, 34) }";
+  css = '.implied { color: rgb(120, 153, 34) }';
 
   changeTextNodes = function(node) {
     var data, i, snapshot, span, _i, _ref;
@@ -22,11 +22,11 @@
     for (i = _i = 0, _ref = snapshot.snapshotLength; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
       node = snapshot.snapshotItem(i);
       data = node.data;
-      if (!(node.parentNode.className === "implied") && data.trim().substr(0, 1) === ">") {
-        span = d.createElement("span");
-        span.className = "implied";
+      if (!(node.parentNode.className === 'implied') && /^>/.test(data.trim())) {
+        span = d.createElement('span');
+        span.className = 'implied';
         span.textContent = data;
-        span.addEventListener("DOMCharacterDataModified", cdm_listener, false);
+        span.addEventListener('DOMCharacterDataModified', cdm_listener, false);
         node.parentNode.replaceChild(span, node);
       }
     }
@@ -37,17 +37,17 @@
   };
 
   cdm_listener = function(event) {
-    return event.target.parentNode.className = event.newValue.trim().substr(0, 1) === ">" ? "implied" : "unimplied";
+    return event.target.parentNode.className = event.newValue.trim().substr(0, 1) === '>' ? 'implied' : 'unimplied';
   };
 
   init = function() {
     var style;
-    style = d.createElement("style");
-    style.type = "text/css";
+    style = d.createElement('style');
+    style.type = 'text/css';
     style.textContent = css;
     d.head.appendChild(style, d.head);
     changeTextNodes(d.body);
-    return d.body.addEventListener("DOMNodeInserted", insertion_listener, false);
+    return d.body.addEventListener('DOMNodeInserted', insertion_listener, false);
   };
 
   init();
