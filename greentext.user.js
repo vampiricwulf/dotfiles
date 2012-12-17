@@ -9,66 +9,62 @@
 // @license MIT License
 // ==/UserScript==
 
-function implying(str) {
-  var t = document.createElement("span");
-	t.innerHTML = str;
-	t.className = "implying";
-	t.style.color = "#789922";
-	return t;
-}
+var TEXT_NODE, cdm_listener, changeTextNodes, green, insertion_listener, replaceTextContent, replacingContent;
 
-function escapeHtml(unsafe) {
-  return unsafe
-      .replace(/&(?!amp;)/g, "&amp;")
-      .replace(/<(?!lt;)/g, "&lt;")
-      .replace(/>(?!gt;)/g, "&gt;")
-      .replace(/"(?!quot;)/g, "&quot;")
-      .replace(/'(?!#039;)/g, "&#039;");
-}
+replaceTextContent = function(node) {
+  var replacingContent, span;
+  if (node.parentNode.getAttribute("contenteditable")) {
+    return;
+  }
+  replacingContent = true;
+  if (node.textContent.substr(0, 1) === ">") {
+    span = document.createElement("span");
+    span.textContent = node.textContent;
+    span.style.color = green;
+    node.parentNode.replaceChild(span, node);
+  }
+  return replacingContent = false;
+};
 
-var TEXT_NODE = Node.TEXT_NODE || 3;
+changeTextNodes = function(node) {
+  var parent, _i, _len, _ref;
+  parent = node.parentNode;
+  if (parent.getAttribute("contenteditable") || parent.style.color === green) {
+    return;
+  }
+  if (node.nodeType === TEXT_NODE) {
+    try {
+      return replaceTextContent(node);
+    } catch (err) {
+      return console.log(err);
+    }
+  } else {
+    _ref = node.childNodes;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      node = _ref[_i];
+      changeTextNodes(node);
+    }
+  }
+};
 
-var replacingContent = false;
-function replaceTextContent(node) {
-	if(node.parentNode.getAttribute("contenteditable")) return;
-	replacingContent = true;
-	if(node.textContent.substr(0,1) == ">") {
-		var txt = node.textContent;
-		var parent = node.parentNode;
-		parent.innerHTML = parent.innerHTML.replace(escapeHtml(txt), "<div id=\"implytest\"></div>");
-		parent.replaceChild(implying(txt), document.getElementById("implytest"));
-	}
-	replacingContent = false;
-}
+insertion_listener = function(event) {
+  return changeTextNodes(event.target);
+};
 
-function changeTextNodes(node) {
-	var length, childNodes, parent = node.parentNode;
-	
-	if(parent.getAttribute("contenteditable")) return;
-	if(parent.className.indexOf("implying") > -1) return;
-	
-	
-	if (node.nodeType == TEXT_NODE) {
-			replaceTextContent(node);
-	} else {
-		childNodes = node.childNodes;
-		length = childNodes.length;
-		for(var i=0; i<length; ++i){
-			changeTextNodes(childNodes[i]);
-		}
-	}
-}
+cdm_listener = function(event) {
+  if (!replacingContent) {
+    return replaceTextContent(event.target);
+  }
+};
 
-function insertion_listener(event) {
-	changeTextNodes(event.target)
-}
+green = "rgb(120, 153, 34)";
 
-function cdm_listener(event) {
-	if(!replacingContent){
-		replaceTextContent(event.target);
-	}
-}
+TEXT_NODE = Node.TEXT_NODE || 3;
+
+replacingContent = false;
 
 changeTextNodes(document.body);
-document.body.addEventListener ("DOMNodeInserted", insertion_listener, false);
-document.body.addEventListener ("DOMCharacterDataModified", cdm_listener, false);
+
+document.body.addEventListener("DOMNodeInserted", insertion_listener, false);
+
+document.body.addEventListener("DOMCharacterDataModified", cdm_listener, false);
