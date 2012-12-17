@@ -22,10 +22,10 @@
     for (i = _i = 0, _ref = snapshot.snapshotLength; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
       node = snapshot.snapshotItem(i);
       data = node.data;
-      if (data.trim().substr(0, 1) === ">") {
+      if (!(node.parentNode.className === "implied") && data.trim().substr(0, 1) === ">") {
         span = d.createElement("span");
         span.className = "implied";
-        span.textContent = node.textContent;
+        span.textContent = data;
         span.addEventListener("DOMCharacterDataModified", cdm_listener, false);
         node.parentNode.replaceChild(span, node);
       }
