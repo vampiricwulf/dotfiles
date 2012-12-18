@@ -1,74 +1,66 @@
 // ==UserScript==
-// @name greentext
-// @namespace Draceros
-// @url https://gist.github.com/3202054
-// @version 1.0
-// @description implying
-// @match *://*/*
-// @exclude *4chan*
-// @license MIT License
+// @name          greentext
+// @namespace     noface
+// @url           https://github.com/ihavenoface/dotfiles/raw/master/greentext.user.js
+// @version       1.1
+// @include       *://*
+// @exclude       *4chan*
+// @license       MIT License
+// @description   implying
 // ==/UserScript==
 
-function implying(str) {
-  var t = document.createElement("span");
-	t.innerHTML = str;
-	t.className = "implying";
-	t.style.color = "#789922";
-	return t;
-}
+(function() {
+  var cdm_listener, changeTextNodes, css, d, init, insertion_listener, replaceTextNode;
 
-function escapeHtml(unsafe) {
-  return unsafe
-      .replace(/&(?!amp;)/g, "&amp;")
-      .replace(/<(?!lt;)/g, "&lt;")
-      .replace(/>(?!gt;)/g, "&gt;")
-      .replace(/"(?!quot;)/g, "&quot;")
-      .replace(/'(?!#039;)/g, "&#039;");
-}
+  d = document;
 
-var TEXT_NODE = Node.TEXT_NODE || 3;
+  css = '.implied { color: rgb(120, 153, 34) }';
 
-var replacingContent = false;
-function replaceTextContent(node) {
-	if(node.parentNode.getAttribute("contenteditable")) return;
-	replacingContent = true;
-	if(node.textContent.substr(0,1) == ">") {
-		var txt = node.textContent;
-		var parent = node.parentNode;
-		parent.innerHTML = parent.innerHTML.replace(escapeHtml(txt), "<div id=\"implytest\"></div>");
-		parent.replaceChild(implying(txt), document.getElementById("implytest"));
-	}
-	replacingContent = false;
-}
+  changeTextNodes = function(node) {
+    var data, i, snapshot, _i, _ref;
+    snapshot = d.evaluate('.//text()', node, null, 6, null);
+    for (i = _i = 0, _ref = snapshot.snapshotLength; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+      node = snapshot.snapshotItem(i);
+      data = node.data;
+      replaceTextNode(node, data);
+    }
+  };
 
-function changeTextNodes(node) {
-	var length, childNodes, parent = node.parentNode;
-	
-	if(parent.getAttribute("contenteditable")) return;
-	if(parent.className.indexOf("implying") > -1) return;
-	
-	
-	if (node.nodeType == TEXT_NODE) {
-			replaceTextContent(node);
-	} else {
-		childNodes = node.childNodes;
-		length = childNodes.length;
-		for(var i=0; i<length; ++i){
-			changeTextNodes(childNodes[i]);
-		}
-	}
-}
+  replaceTextNode = function(node, data) {
+    var span;
+    if (!(node.parentNode.className === 'implied') && /^>/.test(data.trim())) {
+      span = d.createElement('span');
+      span.className = 'implied';
+      span.textContent = data;
+      span.addEventListener('DOMCharacterDataModified', cdm_listener, false);
+      return node.parentNode.replaceChild(span, node);
+    }
+  };
 
-function insertion_listener(event) {
-	changeTextNodes(event.target)
-}
+  insertion_listener = function(event) {
+    var node;
+    node = event.target;
+    if (node.nodeType === 3) {
+      return replaceTextNode(node, node.textContent);
+    } else {
+      return changeTextNodes(node);
+    }
+  };
 
-function cdm_listener(event) {
-	if(!replacingContent){
-		replaceTextContent(event.target);
-	}
-}
+  cdm_listener = function(event) {
+    return event.target.parentNode.className = /^>/.test(event.newValue.trim()) ? 'implied' : 'unimplied';
+  };
 
-changeTextNodes(document.body);
-document.body.addEventListener ("DOMNodeInserted", insertion_listener, false);
-document.body.addEventListener ("DOMCharacterDataModified", cdm_listener, false);
+  init = function() {
+    var style;
+    style = d.createElement('style');
+    style.type = 'text/css';
+    style.textContent = css;
+    d.head.appendChild(style, d.head);
+    changeTextNodes(d.body);
+    return d.body.addEventListener('DOMNodeInserted', insertion_listener, false);
+  };
+
+  init();
+
+}).call(this);
