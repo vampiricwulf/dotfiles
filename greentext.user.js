@@ -10,30 +10,41 @@
 // ==/UserScript==
 
 (function() {
-  var cdm_listener, changeTextNodes, css, d, init, insertion_listener;
+  var cdm_listener, changeTextNodes, css, d, init, insertion_listener, replaceTextNode;
 
   d = document;
 
   css = '.implied { color: rgb(120, 153, 34) }';
 
   changeTextNodes = function(node) {
-    var data, i, snapshot, span, _i, _ref;
+    var data, i, snapshot, _i, _ref;
     snapshot = d.evaluate('.//text()', node, null, 6, null);
     for (i = _i = 0, _ref = snapshot.snapshotLength; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
       node = snapshot.snapshotItem(i);
       data = node.data;
-      if (!(node.parentNode.className === 'implied') && /^>/.test(data.trim())) {
-        span = d.createElement('span');
-        span.className = 'implied';
-        span.textContent = data;
-        span.addEventListener('DOMCharacterDataModified', cdm_listener, false);
-        node.parentNode.replaceChild(span, node);
-      }
+      replaceTextNode(node, data);
+    }
+  };
+
+  replaceTextNode = function(node, data) {
+    var span;
+    if (!(node.parentNode.className === 'implied') && /^>/.test(data.trim())) {
+      span = d.createElement('span');
+      span.className = 'implied';
+      span.textContent = data;
+      span.addEventListener('DOMCharacterDataModified', cdm_listener, false);
+      return node.parentNode.replaceChild(span, node);
     }
   };
 
   insertion_listener = function(event) {
-    return changeTextNodes(event.target);
+    var node;
+    node = event.target;
+    if (node.nodeType === 3) {
+      return replaceTextNode(node, node.textContent);
+    } else {
+      return changeTextNodes(node);
+    }
   };
 
   cdm_listener = function(event) {
