@@ -37,7 +37,7 @@
   };
 
   cdm_listener = function(event) {
-    return event.target.parentNode.className = event.newValue.trim().substr(0, 1) === '>' ? 'implied' : 'unimplied';
+    return event.target.parentNode.className = /^>/.test(event.newValue.trim()) ? 'implied' : 'unimplied';
   };
 
   init = function() {
