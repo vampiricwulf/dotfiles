@@ -1,0 +1,20 @@
+set -e;
+cd /Users/vampiricwulf/Downloads/;
+curl https://codeload.github.com/weechat/weechat/zip/master -o weechat-master.zip;
+unzip weechat*;
+cd ./weechat*;
+mkdir build;
+cd ./build;
+cmake ..;
+perl -p -i -e 's/\/System\/Library\/Frameworks\/Python.framework/\/usr\/local\/Cellar\/python\/2.7.6\/Frameworks\/Python.framework/;' ./CMakeCache.txt;
+perl -p -i -e 's/\/System\/Library\/Frameworks\/python.framework/\/usr\/local\/Cellar\/python\/2.7.6\/Frameworks\/Python.framework/;' ./CMakeCache.txt;
+#perl -p -i -e 's/LIBINTL_INCLUDE:PATH=LIBINTL_INCLUDE-NOTFOUND/LIBINTL_INCLUDE:PATH=\/usr\/local\/Cellar\/gettext\/0.18.3.2\/include
+#
+#\/\/Path to a library. 
+#LIBINTL_LIBRARY:FILEPATH=\/usr\/local\/Cellar\/gettext\/0.18.3.2\/lib\/libintl.dylib/;' ./CMakeCache.txt;
+#perl -p -i -e 's/HAVE_LIBINTL_H:INTERNAL=/HAVE_LIBINTL_H:INTERNAL=1/;' ./CMakeCache.txt;
+cmake ..;
+make;
+sudo make install;
+cd;
+sudo rm -rf /Users/vampiricwulf/Downloads/weechat*;

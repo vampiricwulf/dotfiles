@@ -1,0 +1,5 @@
+if [ "$1" = "--help" ] || [ "$1" = "-help" ] || [ "$1" = "" ]; then
+	echo "Usage: vid2webm input output-name start-time end-time";
+else
+	ffmpeg -i "$1" -ss "$3" -to "$4" -c:v libvpx -crf 4 -b:v 1500K "$2".webm;
+fi

@@ -1,0 +1,1 @@
+for file in *.flac; do $(flac -cd "$file" | lame --preset fast extreme - "${file%.flac}.mp3");

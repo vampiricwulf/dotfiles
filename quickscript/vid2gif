@@ -1,0 +1,14 @@
+if [ "$1" = "--help" ] || [ "$1" = "-help" ] || [ "$1" = "" ]; then
+	echo "Usage: vid2gif input [start-time] [end-time] [frame-rate] [scale] [delay]";
+else
+	mkdir ./pngs;
+	ffmpeg -i "$1" $([ "$2" ] && echo "-ss '$2'" || echo "") $([ "$3" ] && echo "-to '$3'" || echo "") -r $([ "$4" ] && echo "$4" || echo "10") $([ "$5" ] && [ "$5" != 0 ] && echo "-vf scale='$5':-1" || echo "") ./pngs/out%05d.png;
+	mkdir ./gifs;
+	sips -s format gif ./pngs/*.png --out ./gifs;
+	cd ./gifs;
+	gifsicle *.gif --optimize=3 --delay=$([ "$6" ] && echo "$6" || echo "3") --loopcount > animation.gif;
+	mv ./animation.gif ../animation.gif;
+	cd ../;
+	rm -rf ./pngs;
+	rm -rf ./gifs;
+fi
