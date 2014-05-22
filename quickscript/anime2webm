@@ -1,5 +1,5 @@
 if [ "$1" = "--help" ] || [ "$1" = "-help" ] || [ "$1" = "" ]; then
-	echo "Usage: 	anime2webm input output-name [start-time] [end-time] [scale (ex: 480:-1)] [args]
+	echo "Usage: 	anime2webm input output-name [start-time] [end-time] [scale (ex: -1:480)] [args]
 	------------------
 	To get to the args, put letters instead of numbers in [start-time] [end-time] [scale]
 	Example: anime2webm input output-name x x x [args]";
