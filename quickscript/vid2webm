@@ -1,8 +1,14 @@
 if [ "$1" = "--help" ] || [ "$1" = "-help" ] || [ "$1" = "" ]; then
-	echo "Usage: 	vid2webm input output-name [start-time] [end-time] [scale (ex: -1:480)] [args]
+	echo "Usage: 	vid2webm input output-name [start-time] [end-time] [scale (ex: -1:480)] [ffmpeg args]
 	------------------
 	To get to the args, put letters instead of numbers in [start-time] [end-time] [scale]
-	Example: vid2webm input output-name x x x [args]";
+	Example: vid2webm input output-name x x x [args]
+	------------------
+	Any of those variables can be skipped by using a letter.
+	Example 2: Setting a start, but not an end, with a scale:
+	vid2webm input output-name 12 x -1:720
+	Example 1: Setting an end, but no start, with no scale and soundless:
+	vid2webm input output-name x 90 x -an";
 else
     regex="[0-9]+";
     ratio=$([[ "$5"  && $5 =~ $regex ]] && echo "-vf scale=$5" || echo "");
