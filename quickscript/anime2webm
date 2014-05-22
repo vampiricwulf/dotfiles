@@ -4,6 +4,10 @@ if [ "$1" = "--help" ] || [ "$1" = "-help" ] || [ "$1" = "" ]; then
 	To get to the args, put letters instead of numbers in [start-time] [end-time] [scale]
 	Example: anime2webm input output-name x x x [args]";
 else
+	read -p "Would you like to extract and install the fonts [Y/n]? " -n 1 -r;
+		if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+			extractfonts "$1";
+		fi
 	subid=$(mkvmerge -i "$1" | grep subtitles | awk -F" " '{print $3}');
     mkvextract tracks "$1" "$subid"subtitle.ass;
     regex="[0-9]+";

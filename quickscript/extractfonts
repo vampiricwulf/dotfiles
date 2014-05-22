@@ -1,0 +1,7 @@
+mkdir ./tempfonts;
+cd ./tempfonts;
+attach=$(mkvmerge -i "$1" | grep Attachment | awk -F" " '{print $3}' | sed 's/://');
+mkvextract attachments "$1" $attach;
+rsync -av --remove-source-files ./ ~/Library/Fonts/;
+cd ../;
+rm ./tempfonts;
