@@ -1,0 +1,38 @@
+#!/bin/bash
+echo -e "Zip: \c "
+read zipfile
+while [ ! -f "$zipfile" ]; do
+    echo -e "File not found! Zip: \c"
+    read zipfile
+done
+echo -e "Delay (ms): \c"
+read timedelay
+echo
+dir="$(dirname "$zipfile")"
+filename="$(basename -s .zip "$zipfile")"
+gooddelay=0
+cd "$dir"
+mkdir "$filename"
+cd "./$filename"
+unzip "$zipfile"
+echo
+for a in *; do echo "$a -> $a.gif" && convert $a $a.gif && rm $a; done
+echo
+gifsicle --colors 256 -d $timedelay --loop *.gif > ../"$filename".gif
+while [ $gooddelay -eq 0 ]; do
+    read -p "Check the file, is the delay okay (Y/n)? " -n 1 -r
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        gooddelay=1
+    else
+        rm ../"$filename".gif
+        echo
+        echo -e "Delay (ms): \c"
+        read newdelay
+        gifsicle --colors 256 -d $newdelay --loop *.gif > ../"$filename".gif
+    fi
+    echo
+done
+echo "Cleaning up."
+rm -rf "$dir/$filename"
+rm "$zipfile"
+exit 0
