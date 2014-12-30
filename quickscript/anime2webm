@@ -1,3 +1,4 @@
+#!/bin/bash
 if [ "$1" = "--help" ] || [ "$1" = "-help" ] || [ "$1" = "" ]; then
 	echo "Usage: 	anime2webm input output-name [start-time] [end-time] [scale (ex: -1:480)] [args]
 	------------------

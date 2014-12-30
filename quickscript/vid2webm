@@ -1,3 +1,4 @@
+#!/bin/bash
 if [ "$1" = "--help" ] || [ "$1" = "-help" ] || [ "$1" = "" ]; then
 	echo "Usage: 	vid2webm input output-name [start-time] [end-time] [scale (ex: -1:480)] [ffmpeg args]
 	------------------
@@ -12,5 +13,5 @@ if [ "$1" = "--help" ] || [ "$1" = "-help" ] || [ "$1" = "" ]; then
 else
     regex="[0-9]+";
     ratio=$([[ "$5"  && $5 =~ $regex ]] && echo "-vf scale=$5" || echo "");
-	ffmpeg -i "$1" $([[ "$3" &&  $3 =~ $regex ]] && echo "-ss $3" || echo "") $([[ "$4" &&  $4 =~ $regex ]] && echo "-to $4" || echo "") $([[ "${@:6}" ]] && echo "${@:6}" || echo "") $ratio -c:v libvpx -crf 0 -b:v 1500K "$2".webm;
+	ffmpeg -i "$1" $([[ "$3" &&  $3 =~ $regex ]] && echo "-ss $3" || echo "") $([[ "$4" &&  $4 =~ $regex ]] && echo "-to $4" || echo "") $([[ "${@:6}" ]] && echo "${@:6}" || echo "") $ratio -c:v libvpx -b:v 1500K -c:a libvorbis "$2".webm;
 fi

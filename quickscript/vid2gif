@@ -1,3 +1,4 @@
+#!/bin/bash
 if [ "$1" = "--help" ] || [ "$1" = "-help" ] || [ "$1" = "" ]; then
 	echo "Usage: vid2gif input [start-time] [end-time] [frame-rate] [scale] [delay]";
 else

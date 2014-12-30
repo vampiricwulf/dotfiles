@@ -1,3 +1,4 @@
+#!/bin/bash
 if [ "$1" = "--help" ] || [ "$1" = "-help" ] || [ "$1" = "" ]; then
 	echo "Usage: gif2webm input";
 else
