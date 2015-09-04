@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -x
+
+with_subtitles() {
+ ffmpeg -hide_banner -i "$file" -vf "subtitles='$file'" "${file//.mkv/.mp4}"
+}
+
+without_subtitles() {
+ ffmpeg -hide_banner -y -i "$file" "${file//.mkv/.mp4}"
+}
+
+for file in *.mkv; do
+ with_subtitles || without_subtitles;
+done

@@ -1,4 +1,0 @@
-#!/bin/bash
-for file in *.flac; do
-	flac2mp3 "$file" V0
-done

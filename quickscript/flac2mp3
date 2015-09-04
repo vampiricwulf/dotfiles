@@ -1,0 +1,4 @@
+#!/bin/bash
+for file in *.flac; do
+	flac -c -d "$file" | lame -V 0 - "${file//.flac/.mp3}"
+done

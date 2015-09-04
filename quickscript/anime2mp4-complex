@@ -1,0 +1,18 @@
+#!/bin/bash
+the_work() {
+	extractfonts "$file";
+	mkvextract tracks "$file" "$subtrack":subtitle.ass;
+	ffmpeg -hide_banner -i "$file" -vf ass=subtitle.ass -map 0:0 -map 0:"$audtrack" "${file//.mkv/.mp4}"
+	rm ./subtitle.ass;
+}
+for file in *.mkv; do
+	ffprobe -hide_banner -i "$file" 2>&1 | grep -A 2 ": Audio\|: Subtitle"
+	break
+done
+echo -e "Which stream is the correct audio stream #0:\c"
+read audtrack
+echo -e "Which stream is the correct subtitle stream #0:\c"
+read subtrack
+for file in *.mkv; do
+ the_work;
+done

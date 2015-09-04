@@ -1,0 +1,9 @@
+#!/bin/bash
+mkdir fix
+mkdir old
+for f in *.mp3; do 
+    lame -V 0 "$f" ./fix/"${f%.mp3}.mp3";
+    mv "$f" "./old/$f"
+done
+mv ./fix/* ./
+rm -rf ./fix
