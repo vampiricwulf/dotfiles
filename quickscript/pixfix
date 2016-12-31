@@ -1,0 +1,7 @@
+dir=${PWD##*/} && for f in *; do 
+if [[ $f == *"${dir}_"* ]]
+then
+mkdir -p "${f//${dir}_*/${dir}\/}";
+mv "$f" "${f//${dir}_/${dir}\/}";
+fi
+done
